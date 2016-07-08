@@ -1,0 +1,48 @@
+//
+//  SnakeView.swift
+//  swift-snake
+//
+//  Created by Weihang Lo on 7/8/16.
+//  Copyright © 2016 Weihang Lo. All rights reserved.
+//
+
+import UIKit
+
+let π = CGFloat(M_PI)
+
+protocol SnakeViewDelegate {
+    func snakeModelForSnakeView(view: SnakeView) -> SnakeModel
+    func pointOfFruitForSnakeView(view:SnakeView) -> Point?
+}
+
+@IBDesignable
+class SnakeView: UIView {
+    
+    var delegate: SnakeViewDelegate?
+
+    override func drawRect(rect: CGRect) {
+        super.drawRect(rect)
+        
+        guard let snake = delegate?.snakeModelForSnakeView(self) else { return }
+        
+        
+        let worldSize = snake.worldSize
+        
+        let w = Int(Float(rect.width) / Float(worldSize.width))
+        let h = Int(Float(rect.height) / Float(worldSize.height))
+        
+        UIColor.greenColor().set()
+        for point in snake.body {
+            let rect = CGRect(x: point.x * w, y: point.y * h, width: w, height: h)
+            UIBezierPath(rect: rect).fill()
+        }
+        
+        
+        if let fruit = delegate?.pointOfFruitForSnakeView(self) {
+            UIColor.redColor().set()
+            let rect = CGRect(x: fruit.x * w, y: fruit.y * h, width: w, height: h)
+            UIBezierPath(ovalInRect: rect).fill()
+        }
+    }
+    
+}
