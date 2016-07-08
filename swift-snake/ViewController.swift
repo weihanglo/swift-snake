@@ -63,18 +63,24 @@ class ViewController: UIViewController {
         let width = UInt32(snake.worldSize.width)
         let height = UInt32(snake.worldSize.height)
         
-        var isBody = true
         
-        while isBody {
+        while true {
+            var isBody = false
             let x = Int(arc4random_uniform(width))
             let y = Int(arc4random_uniform(height))
             
             for point in snake.body {
-                if point.x != x || point.y != y {
-                    isBody = false
-                    fruit = Point(x: x, y: y)
-                    return
+                if point.x == x && point.y == y {
+                    isBody = true
+                    break
                 }
+            }
+            
+            if !isBody {
+                fruit = Point(x: x, y: y)
+                print(fruit)
+                print(snake.body)
+                break
             }
         }
     }
@@ -100,20 +106,19 @@ class ViewController: UIViewController {
     }
     
     @objc private func buttonAction(sender: AnyObject) {
-        fruit = nil
         
         UIView.animateWithDuration(0.3, animations: {
             self.newButton.transform = CGAffineTransformMakeScale(0.1, 0.1)
             self.newButton.alpha = 0.5
         }) { _ in
             self.newButton.hidden = true
+            self.snake = SnakeModel(worldSize: WorldSize(width: 20, height: 20))
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: #selector(self.timerAction(_:)) , userInfo: nil, repeats: true)
+            self.snakeView.setNeedsDisplay()
+            self.timer?.fire()
+            self.createFruit()
         }
         
-        snake = SnakeModel(worldSize: WorldSize(width: 20, height: 20))
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: #selector(timerAction(_:)) , userInfo: nil, repeats: true)
-        snakeView.setNeedsDisplay()
-        timer?.fire()
-        createFruit()
     }
     
     @objc private func timerAction(sender: AnyObject) {
@@ -125,8 +130,10 @@ class ViewController: UIViewController {
             snake.extendBody()
             createFruit()
         }
+        
         if snake.bumpIntoBorder() || snake.bumpIntoSelf() {
             timer?.invalidate()
+            timer = nil
             
             snake.extendBody()
             
@@ -135,8 +142,6 @@ class ViewController: UIViewController {
                 self.newButton.transform = CGAffineTransformMakeScale(1, 1)
                 self.newButton.alpha = 1.0
             }, completion: nil)
-            
-            timer = nil
         }
         snakeView.setNeedsDisplay()
     }
