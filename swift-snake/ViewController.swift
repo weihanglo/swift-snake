@@ -78,8 +78,6 @@ class ViewController: UIViewController {
             
             if !isBody {
                 fruit = Point(x: x, y: y)
-                print(fruit)
-                print(snake.body)
                 break
             }
         }
@@ -106,6 +104,8 @@ class ViewController: UIViewController {
     }
     
     @objc private func buttonAction(sender: AnyObject) {
+        
+        (sender as? UIButton)?.enabled = false
         
         UIView.animateWithDuration(0.3, animations: {
             self.newButton.transform = CGAffineTransformMakeScale(0.1, 0.1)
@@ -138,6 +138,7 @@ class ViewController: UIViewController {
             snake.extendBody()
             
             newButton.hidden = false
+            newButton.enabled = true
             UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 8.0, options: .BeginFromCurrentState, animations: {
                 self.newButton.transform = CGAffineTransformMakeScale(1, 1)
                 self.newButton.alpha = 1.0
