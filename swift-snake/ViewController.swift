@@ -13,14 +13,14 @@ class ViewController: UIViewController {
     private var snake: SnakeModel?
     private var fruit: Point?
     private let snakeView = SnakeView()
-    private var timer: NSTimer?
+    private var timer: Timer?
     
-    private let newButton = UIButton(type: .Custom)
+    private let newButton = UIButton(type: .custom)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .whiteColor()
+        view.backgroundColor = .white
         
         
         snake = SnakeModel(worldSize: WorldSize(width: 20, height: 20))
@@ -31,20 +31,20 @@ class ViewController: UIViewController {
         
         let width = view.bounds.width
         let height = view.bounds.height
-        newButton.setTitle("New Game", forState: .Normal)
+        newButton.setTitle("New Game", for: .normal)
         newButton.layer.cornerRadius = 5.0
         newButton.backgroundColor = UIColor(red: 0.3, green: 0.8, blue: 0.45, alpha: 1.0)
-        newButton.autoresizingMask = [.FlexibleTopMargin, .FlexibleBottomMargin, .FlexibleLeftMargin, .FlexibleRightMargin]
+        newButton.autoresizingMask = [.flexibleTopMargin, .flexibleBottomMargin, .flexibleLeftMargin, .flexibleRightMargin]
         newButton.frame = CGRect(x: (width - 100) / 2, y: (height - 40) / 2, width: 100, height: 40)
-        newButton.addTarget(self, action: #selector(buttonAction(_:)), forControlEvents: .TouchUpInside)
-        newButton.layer.shadowPath = UIBezierPath(rect: newButton.bounds).CGPath
-        newButton.layer.shadowColor = UIColor.blackColor().CGColor
+        newButton.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+        newButton.layer.shadowPath = UIBezierPath(rect: newButton.bounds).cgPath
+        newButton.layer.shadowColor = UIColor.black.cgColor
         newButton.layer.shadowOpacity = 0.5
         newButton.layer.shadowOffset = CGSize(width: 0, height: 0.3)
         view.addSubview(newButton)
         
         
-        let directionArray: [UISwipeGestureRecognizerDirection] = [.Up, .Down, .Left, .Right]
+        let directionArray: [UISwipeGestureRecognizer.Direction] = [.up, .down, .left, .right]
         directionArray.forEach { direction in
             let swipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeAction(_:)))
             swipe.direction = direction
@@ -103,17 +103,17 @@ class ViewController: UIViewController {
         snakeView.frame = CGRect(origin: origin, size: size)
     }
     
-    @objc private func buttonAction(sender: AnyObject) {
+    @objc private func buttonAction(_ sender: AnyObject) {
         
-        (sender as? UIButton)?.enabled = false
+        (sender as? UIButton)?.isEnabled = false
         
-        UIView.animateWithDuration(0.3, animations: {
-            self.newButton.transform = CGAffineTransformMakeScale(0.1, 0.1)
+        UIView.animate(withDuration: 0.3, animations: {
+            self.newButton.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
             self.newButton.alpha = 0.5
         }) { _ in
-            self.newButton.hidden = true
+            self.newButton.isHidden = true
             self.snake = SnakeModel(worldSize: WorldSize(width: 20, height: 20))
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: #selector(self.timerAction(_:)) , userInfo: nil, repeats: true)
+            self.timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(self.timerAction(_:)) , userInfo: nil, repeats: true)
             self.snakeView.setNeedsDisplay()
             self.timer?.fire()
             self.createFruit()
@@ -121,7 +121,7 @@ class ViewController: UIViewController {
         
     }
     
-    @objc private func timerAction(sender: AnyObject) {
+    @objc private func timerAction(_ sender: AnyObject) {
         guard let fruit = fruit else { return }
         guard let snake = snake else { return }
         
@@ -137,27 +137,27 @@ class ViewController: UIViewController {
             
             snake.extendBody()
             
-            newButton.hidden = false
-            newButton.enabled = true
-            UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 8.0, options: .BeginFromCurrentState, animations: {
-                self.newButton.transform = CGAffineTransformMakeScale(1, 1)
+            newButton.isHidden = false
+            newButton.isEnabled = true
+            UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 8.0, options: .beginFromCurrentState, animations: {
+                self.newButton.transform = CGAffineTransform(scaleX: 1, y: 1)
                 self.newButton.alpha = 1.0
             }, completion: nil)
         }
         snakeView.setNeedsDisplay()
     }
     
-    @objc private func swipeAction(sender: UIGestureRecognizer) {
+    @objc private func swipeAction(_ sender: UIGestureRecognizer) {
         guard let gesture = sender as? UISwipeGestureRecognizer else { return }
         
         switch gesture.direction {
-        case UISwipeGestureRecognizerDirection.Up:
+            case UISwipeGestureRecognizer.Direction.up:
             snake?.direction = .Down
-        case UISwipeGestureRecognizerDirection.Down:
+            case UISwipeGestureRecognizer.Direction.down:
             snake?.direction = .Up
-        case UISwipeGestureRecognizerDirection.Left:
+            case UISwipeGestureRecognizer.Direction.left:
             snake?.direction = .Left
-        case UISwipeGestureRecognizerDirection.Right:
+            case UISwipeGestureRecognizer.Direction.right:
             snake?.direction = .Right
             
         default: break
@@ -166,11 +166,11 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: SnakeViewDelegate {
-    func snakeModelForSnakeView(view: SnakeView) -> SnakeModel {
+    func snakeModelForSnakeView(_ view: SnakeView) -> SnakeModel {
         return snake!
     }
     
-    func pointOfFruitForSnakeView(view: SnakeView) -> Point? {
+    func pointOfFruitForSnakeView(_ view: SnakeView) -> Point? {
         return fruit
     }
 }

@@ -24,7 +24,7 @@ enum Direction {
     case Right
     case Left
     
-    func shouldChangeDirection(direction: Direction) -> Bool {
+    func shouldChangeDirection(_ direction: Direction) -> Bool {
         var canChange = true
         
         switch self {
@@ -93,7 +93,7 @@ class SnakeModel {
     }
     
     func moveHead() {
-        body.insert(_willMoveHead(), atIndex: 0)
+        body.insert(_willMoveHead(), at: 0)
         _cachedTail = body.popLast()
     }
     
@@ -104,7 +104,7 @@ class SnakeModel {
     }
     
     func bumpIntoSelf() -> Bool {
-        for (idx, point) in body.enumerate() {
+        for (idx, point) in body.enumerated() {
             if idx == 0 { continue }
             
             if point.x == head.x && point.y == head.y {
