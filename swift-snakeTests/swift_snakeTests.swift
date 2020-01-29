@@ -52,19 +52,19 @@ class swift_snakeTests: XCTestCase {
         body = [Point(x: 9, y: 11), Point(x: 10, y: 11)]
         snake.direction = .Left
         snake.moveHead()
-        flag = checkBodyIdentical(snake.body, anotherBody: body)
+        flag = checkBodyIdentical(body: snake.body, anotherBody: body)
         XCTAssertTrue(flag,  "Body is not correct after moving Left")
         
         body = [Point(x: 9, y: 10), Point(x: 9, y: 11)]
         snake.direction = .Down
         snake.moveHead()
-        flag = checkBodyIdentical(snake.body, anotherBody: body)
+        flag = checkBodyIdentical(body: snake.body, anotherBody: body)
         XCTAssertTrue(flag,  "Body is not correct after moving south")
         
         snake.direction = .Right
         snake.moveHead()
         body = [Point(x: 10, y: 10), Point(x: 9, y: 10)]
-        flag = checkBodyIdentical(snake.body, anotherBody: body)
+        flag = checkBodyIdentical(body: snake.body, anotherBody: body)
         XCTAssertTrue(flag,  "Body is not correct after moving east")
     }
     
@@ -81,14 +81,14 @@ class swift_snakeTests: XCTestCase {
         snake.direction = .Up
         snake.moveHead()
         snake.extendBody()
-        flag = checkBodyIdentical(snake.body, anotherBody: body)
+        flag = checkBodyIdentical(body: snake.body, anotherBody: body)
         XCTAssertTrue(flag, "Body is not correct when called extendBody after moving Left")
         
         body.insert(Point(x: 11, y: 11), at: 0)
         snake.direction = .Right
         snake.moveHead()
         snake.extendBody()
-        flag = checkBodyIdentical(snake.body, anotherBody: body)
+        flag = checkBodyIdentical(body: snake.body, anotherBody: body)
         XCTAssertTrue(flag, "Body is not correct when called extendBody after moving east")
     }
     
