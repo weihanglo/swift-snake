@@ -15,7 +15,7 @@ class swift_snakeUITests: XCTestCase {
         
         continueAfterFailure = false
         XCUIApplication().launch()
-        XCUIDevice.sharedDevice().orientation = UIDeviceOrientation.Portrait
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
     }
     
     override func tearDown() {
@@ -27,12 +27,12 @@ class swift_snakeUITests: XCTestCase {
         let app = XCUIApplication()
         let button = app.buttons["New Game"]
         
-        XCTAssertTrue(button.enabled)
+        XCTAssertTrue(button.isEnabled)
         button.tap()
         
-        expectationForPredicate(NSPredicate(format: "enabled == true") , evaluatedWithObject: button, handler: nil)
+        expectation(for: NSPredicate(format: "enabled == true") , evaluatedWith: button, handler: nil)
         
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
 }

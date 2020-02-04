@@ -8,11 +8,11 @@
 
 import UIKit
 
-let π = CGFloat(M_PI)
+let π = Double.pi
 
 protocol SnakeViewDelegate {
-    func snakeModelForSnakeView(view: SnakeView) -> SnakeModel
-    func pointOfFruitForSnakeView(view:SnakeView) -> Point?
+    func snakeModelForSnakeView(_ view: SnakeView) -> SnakeModel
+    func pointOfFruitForSnakeView(_ view:SnakeView) -> Point?
 }
 
 @IBDesignable
@@ -20,8 +20,8 @@ class SnakeView: UIView {
     
     var delegate: SnakeViewDelegate?
 
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         
         guard let snake = delegate?.snakeModelForSnakeView(self) else { return }
         
@@ -31,7 +31,7 @@ class SnakeView: UIView {
         let w = Int(Float(rect.width) / Float(worldSize.width))
         let h = Int(Float(rect.height) / Float(worldSize.height))
         
-        UIColor.greenColor().set()
+        UIColor.green.set()
         for point in snake.body {
             let rect = CGRect(x: point.x * w, y: point.y * h, width: w, height: h)
             UIBezierPath(rect: rect).fill()
@@ -39,9 +39,9 @@ class SnakeView: UIView {
         
         
         if let fruit = delegate?.pointOfFruitForSnakeView(self) {
-            UIColor.redColor().set()
+            UIColor.red.set()
             let rect = CGRect(x: fruit.x * w, y: fruit.y * h, width: w, height: h)
-            UIBezierPath(ovalInRect: rect).fill()
+            UIBezierPath(ovalIn: rect).fill()
         }
     }
     
